@@ -1,1 +1,1 @@
-# Draft
+# SCD platform draft
