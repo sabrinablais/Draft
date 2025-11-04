@@ -1,1 +1,263 @@
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum necessitatibus praesentium velit illum nisi temporibus deleniti id aliquam beatae veniam ex est consequuntur, neque eveniet error iure debitis, minus delectus.
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>The Sickle Cell Hub</title>
+    <style>
+        :root{
+            --primary:#b71c1c;
+            --dark:#7a0000;
+            --accent:#ffebee;
+            --muted:#fff3f3;
+            --max-width:1200px;
+            --radius:14px;
+            --gap:22px;
+            font-family: -apple-system, "SF Pro Text", "SF Pro Display", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0}
+        body{
+            background:linear-gradient(180deg,var(--primary),var(--dark));
+            color:#111;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            overflow-y:auto;
+        }
+
+        /* HERO (first thing seen) */
+        .hero{
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            padding:40px 20px;
+            position:relative;
+            color:white;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 10%),
+                radial-gradient(circle at 90% 80%, rgba(0,0,0,0.06), transparent 18%);
+            clip-path:ellipse(100% 100% at 50% 0%);
+        }
+        .hero-inner{
+            max-width:980px;
+            width:100%;
+            backdrop-filter: blur(0px);
+        }
+        .title{
+            font-size:clamp(36px,8vw,84px);
+            margin:0;
+            letter-spacing:-1px;
+            font-weight:900;
+            text-transform:none;
+            text-shadow:0 10px 30px rgba(0,0,0,0.35);
+        }
+        .subtitle{
+            margin:12px 0 0;
+            font-size:clamp(14px,3.2vw,22px);
+            opacity:0.95;
+            font-weight:700;
+        }
+        .tagline{
+            margin-top:18px;
+            font-size:clamp(14px,2.2vw,18px);
+            color:rgba(255,255,255,0.9);
+            opacity:0.95;
+        }
+        .hero-accent{
+            display:inline-block;
+            margin-top:22px;
+            background:rgba(255,255,255,0.09);
+            padding:10px 18px;
+            border-radius:999px;
+            font-weight:800;
+            color:#fff;
+            font-size:14px;
+            border:1px solid rgba(255,255,255,0.06);
+        }
+
+        /* top bar that appears on scroll */
+        .topbar{
+            position:fixed;
+            left:0;right:0;top:0;
+            height:64px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            padding:8px 20px;
+            transform:translateY(-120%);
+            opacity:0;
+            transition:transform .32s cubic-bezier(.2,.9,.2,1),opacity .28s;
+            background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+            border-bottom:1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(6px);
+            z-index:60;
+        }
+        body.scrolled .topbar{ transform:translateY(0); opacity:1 }
+
+        .nav-left{display:flex;align-items:center;gap:12px}
+        .nav-logo{
+            width:44px;height:44px;border-radius:10px;
+            background:linear-gradient(180deg,var(--primary),var(--dark));
+            color:white;font-weight:900;display:flex;align-items:center;justify-content:center;
+            box-shadow:0 4px 18px rgba(0,0,0,0.28);
+            font-size:14px;
+        }
+        nav a{
+            color:white;
+            text-decoration:none;
+            margin-left:12px;
+            font-weight:700;
+            font-size:13px;
+            padding:8px 10px;
+            border-radius:10px;
+            opacity:0.95;
+        }
+        nav a:hover{background:rgba(255,255,255,0.04)}
+        .nav-right a{background:var(--primary);color:#fff;padding:8px 12px;border-radius:12px;text-decoration:none;font-weight:800}
+
+        /* content sections (below the hero, accessible after scrolling) */
+        main{
+            max-width:var(--max-width);
+            margin:40px auto;
+            padding:12px;
+            color:#111;
+        }
+        section.card{
+            background:linear-gradient(180deg,#fff 0%, #fff6f6 100%);
+            border-radius:12px;
+            padding:18px;
+            margin:18px 0;
+            box-shadow:0 8px 30px rgba(0,0,0,0.06);
+            border:1px solid rgba(183,28,28,0.06);
+        }
+        section.card h2{margin:0 0 8px 0}
+        .small-link{display:inline-block;background:var(--primary);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
+
+        /* footer: much smaller and black */
+        footer.site-footer{
+            background:#000;
+            color:#fff;
+            text-align:center;
+            padding:8px 12px;
+            font-size:12px;
+            margin-top:28px;
+            border-top:1px solid rgba(255,255,255,0.03);
+        }
+
+        /* responsive tweaks */
+        @media (max-width:720px){
+            .topbar{height:56px;padding:8px 12px}
+            nav a{display:none}
+            nav a.mobile-show{display:inline-block}
+            .title{font-size:clamp(28px,10vw,48px)}
+        }
+    </style>
+</head>
+<body>
+    <!-- topbar is hidden until user scrolls -->
+    <div class="topbar" role="navigation" aria-hidden="true">
+        <div class="nav-left">
+            <div class="nav-logo" aria-hidden="true">SCH</div>
+            <nav>
+                <a href="#mapSection">Map</a>
+                <a href="#videosSection">Videos</a>
+                <a href="#mythSection">Myth buster</a>
+                <a href="#bloodSection">Blood info</a>
+                <a href="#eventsSection">Events</a>
+                <a href="#aboutSection">About</a>
+                <a href="#contactSection">Contact</a>
+            </nav>
+        </div>
+        <div class="nav-right">
+            <a href="about.html">Get involved</a>
+        </div>
+    </div>
+
+    <!-- HERO: the only thing visible on load -->
+    <header class="hero" role="banner" aria-label="Hero">
+        <div class="hero-inner">
+            <h1 class="title">The Sickle Cell Hub</h1>
+            <div class="subtitle">By youth for youth</div>
+            <div class="tagline">A platform for youth — peer support, learning, and action</div>
+            <div class="hero-accent" aria-hidden="true">Youth-led • Peer-powered • Reach out</div>
+        </div>
+    </header>
+
+    <!-- main content is below; visible after scroll -->
+    <main>
+        <section id="mapSection" class="card" aria-labelledby="mapH">
+            <h2 id="mapH">Interactive map (open full map)</h2>
+            <p>Find clinics, youth groups and activities near you. Click to open the full interactive map page.</p>
+            <a class="small-link" href="map.html">Open map</a>
+        </section>
+
+        <section id="videosSection" class="card" aria-labelledby="vidH">
+            <h2 id="vidH">Educational videos</h2>
+            <p>Youth-friendly short videos about living with sickle cell and self-care.</p>
+            <a class="small-link" href="blood.html">Open videos</a>
+        </section>
+
+        <section id="mythSection" class="card" aria-labelledby="mythH">
+            <h2 id="mythH">Myth buster</h2>
+            <p>Quick facts to fight stigma and misinformation. Full tools on the dedicated page.</p>
+            <a class="small-link" href="mythbuster.html">Open myth buster</a>
+        </section>
+
+        <section id="bloodSection" class="card" aria-labelledby="bloodH">
+            <h2 id="bloodH">Blood information & resources</h2>
+            <p>Clear, practical guides about transfusions, donation and what matters for young people with SCD.</p>
+            <a class="small-link" href="blood.html">Learn more</a>
+        </section>
+
+        <section id="eventsSection" class="card" aria-labelledby="eventsH">
+            <h2 id="eventsH">Activities & events</h2>
+            <p>Volunteer opportunities, runs and local meetups — join, create or lead an event.</p>
+            <a class="small-link" href="about.html">See events</a>
+        </section>
+
+        <section id="aboutSection" class="card" aria-labelledby="aboutH">
+            <h2 id="aboutH">About</h2>
+            <p>Built by young advocates with lived experience of sickle cell. A platform for youth to connect, learn and act.</p>
+            <a class="small-link" href="about.html">About the founder</a>
+        </section>
+
+        <section id="contactSection" class="card" aria-labelledby="contactH">
+            <h2 id="contactH">Contact</h2>
+            <p>Email: <a href="mailto:hello@sicklecellhub.example">hello@sicklecellhub.example</a></p>
+            <a class="small-link" href="contact.html">Contact page</a>
+        </section>
+    </main>
+
+    <!-- small black footer -->
+    <footer class="site-footer" role="contentinfo">
+        &copy; <span id="year"></span> The Sickle Cell Hub — By youth, for youth
+    </footer>
+
+    <script>
+        // show compact topbar when user scrolls past the hero
+        const onScroll = () => {
+            if (window.scrollY > 120) {
+                document.body.classList.add('scrolled');
+                document.querySelector('.topbar')?.setAttribute('aria-hidden','false');
+            } else {
+                document.body.classList.remove('scrolled');
+                document.querySelector('.topbar')?.setAttribute('aria-hidden','true');
+            }
+        };
+        window.addEventListener('scroll', onScroll, {passive:true});
+        // set year
+        document.getElementById('year').textContent = new Date().getFullYear();
+        // smooth in-page navigation
+        document.querySelectorAll('a[href^="#"]').forEach(a=>{
+            a.addEventListener('click', (e)=>{
+                const id = a.getAttribute('href').slice(1);
+                const el = document.getElementById(id);
+                if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+            });
+        });
+    </script>
+</body>
+</html>
