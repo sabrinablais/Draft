@@ -4,12 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>The Sickle Cell Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
     <style>
         :root{
-            --primary:#b71c1c;
-            --dark:#7a0000;
-            --accent:#ffebee;
-            --muted:#fff3f3;
+            --primary:#BF1922;
+            --dark:#92121a; 
+            --light:#f7fbfc;
+            --accent:#e32832;
+            --text-dark:#111111;
+            --text-light:#f7fbfc;
+            --bg-dark:#2a2a2a;
             --max-width:1200px;
             --radius:14px;
             --gap:22px;
@@ -19,13 +24,13 @@
         html,body{height:100%;margin:0}
         body{
             background:linear-gradient(180deg,var(--primary),var(--dark));
-            color:#111;
+            color:var(--text-dark);
             -webkit-font-smoothing:antialiased;
             -moz-osx-font-smoothing:grayscale;
             overflow-y:auto;
         }
 
-        /* HERO (first thing seen) */
+        /* HERO */
         .hero{
             min-height:100vh;
             display:flex;
@@ -34,229 +39,218 @@
             text-align:center;
             padding:40px 20px;
             position:relative;
-            color:white;
+            color:var(--text-light);
             background-image:
-                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 10%),
-                radial-gradient(circle at 90% 80%, rgba(0,0,0,0.06), transparent 18%);
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05), transparent 15%),
+                radial-gradient(circle at 90% 80%, rgba(0,0,0,0.08), transparent 25%);
             clip-path:ellipse(100% 100% at 50% 0%);
         }
         .hero-inner{
-            max-width:980px;
+            max-width:1080px;
             width:100%;
-            backdrop-filter: blur(0px);
+            backdrop-filter: blur(3px);
         }
         .title{
-            font-size:clamp(36px,8vw,84px);
+            font-size:clamp(42px,10vw,92px);
             margin:0;
-            letter-spacing:-1px;
+            letter-spacing:-2px;
             font-weight:900;
             text-transform:none;
-            text-shadow:0 10px 30px rgba(0,0,0,0.35);
+            text-shadow:0 10px 40px rgba(0,0,0,0.4);
         }
         .subtitle{
-            margin:12px 0 0;
-            font-size:clamp(14px,3.2vw,22px);
+            margin:16px 0 0;
+            font-size:clamp(16px,3.5vw,26px);
             opacity:0.95;
             font-weight:700;
         }
         .tagline{
-            margin-top:18px;
-            font-size:clamp(14px,2.2vw,18px);
-            color:rgba(255,255,255,0.9);
+            margin-top:22px;
+            font-size:clamp(15px,2.4vw,20px);
+            color:rgba(255,255,255,0.92);
             opacity:0.95;
         }
         .hero-accent{
             display:inline-block;
-            margin-top:22px;
-            background:rgba(255,255,255,0.09);
-            padding:10px 18px;
+            margin-top:28px;
+            background:rgba(255,255,255,0.1);
+            padding:12px 24px;
             border-radius:999px;
             font-weight:800;
             color:#fff;
-            font-size:14px;
-            border:1px solid rgba(255,255,255,0.06);
+            font-size:15px;
+            border:1px solid rgba(255,255,255,0.08);
+            backdrop-filter:blur(4px);
         }
 
-        /* top bar that appears on scroll */
+        /* Adaptive topbar */
         .topbar{
             position:fixed;
             left:0;right:0;top:0;
-            height:64px;
+            height:68px;
             display:flex;
             align-items:center;
             justify-content:space-between;
-            gap:12px;
-            padding:8px 20px;
+            gap:16px;
+            padding:10px 24px;
             transform:translateY(-120%);
             opacity:0;
-            transition:transform .32s cubic-bezier(.2,.9,.2,1),opacity .28s;
-            background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
-            border-bottom:1px solid rgba(255,255,255,0.04);
-            backdrop-filter: blur(6px);
+            transition:all .35s cubic-bezier(.2,.9,.2,1);
+            background:rgba(42,42,42,0.85);
+            border-bottom:1px solid rgba(255,255,255,0.06);
+            backdrop-filter:blur(10px);
             z-index:60;
         }
         body.scrolled .topbar{ transform:translateY(0); opacity:1 }
-
-        .nav-left{display:flex;align-items:center;gap:12px}
+        
+        .nav-left{display:flex;align-items:center;gap:16px}
         .nav-logo{
-            width:44px;height:44px;border-radius:10px;
-            background:linear-gradient(180deg,var(--primary),var(--dark));
+            width:48px;height:48px;border-radius:12px;
+            background:linear-gradient(135deg,var(--primary),var(--dark));
             color:white;font-weight:900;display:flex;align-items:center;justify-content:center;
-            box-shadow:0 4px 18px rgba(0,0,0,0.28);
-            font-size:14px;
+            box-shadow:0 6px 20px rgba(0,0,0,0.3);
+            font-size:15px;
         }
         nav a{
-            color:white;
+            color:var(--text-light);
             text-decoration:none;
-            margin-left:12px;
+            margin-left:14px;
             font-weight:700;
-            font-size:13px;
-            padding:8px 10px;
-            border-radius:10px;
+            font-size:14px;
+            padding:10px 14px;
+            border-radius:12px;
             opacity:0.95;
+            transition:all 0.2s ease;
         }
-        nav a:hover{background:rgba(255,255,255,0.04)}
-        .nav-right a{background:var(--primary);color:#fff;padding:8px 12px;border-radius:12px;text-decoration:none;font-weight:800}
+        nav a:hover{background:rgba(255,255,255,0.1)}
+        .nav-right a{
+            background:var(--primary);
+            color:#fff;
+            padding:10px 18px;
+            border-radius:14px;
+            text-decoration:none;
+            font-weight:800;
+            box-shadow:0 4px 15px rgba(183,28,28,0.2);
+        }
 
-        /* content sections (below the hero, accessible after scrolling) */
+        /* Content sections */
         main{
             max-width:var(--max-width);
-            margin:40px auto;
-            padding:12px;
-            color:#111;
+            margin:60px auto;
+            padding:20px;
+            color:var(--text-dark);
         }
         section.card{
-            background:linear-gradient(180deg,#fff 0%, #fff6f6 100%);
-            border-radius:12px;
-            padding:18px;
-            margin:18px 0;
-            box-shadow:0 8px 30px rgba(0,0,0,0.06);
-            border:1px solid rgba(183,28,28,0.06);
-        }
-        section.card h2{margin:0 0 8px 0}
-        .small-link{display:inline-block;background:var(--primary);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:700}
-
-        /* footer: much smaller and black */
-        footer.site-footer{
-            background:#000;
-            color:#fff;
+            background:linear-gradient(165deg,#fff 0%, #fff8f8 100%);
+            border-radius:18px;
+            padding:32px;
+            margin:28px 0;
+            box-shadow:0 12px 40px rgba(0,0,0,0.08);
+            border:1px solid rgba(183,28,28,0.08);
             text-align:center;
-            padding:8px 12px;
-            font-size:12px;
-            margin-top:28px;
-            border-top:1px solid rgba(255,255,255,0.03);
+            transform:translateY(0);
+            transition:all 0.3s ease;
+        }
+        section.card:hover {
+            transform:translateY(-4px);
+            box-shadow:0 16px 45px rgba(0,0,0,0.12);
+        }
+        section.card h2{
+            margin:0 0 16px 0;
+            font-size:28px;
+            color:var(--primary);
+        }
+        section.card p {
+            font-size:16px;
+            line-height:1.6;
+            color:var(--text-dark);
+            max-width:720px;
+            margin:0 auto 20px;
+        }
+        .small-link{
+            display:inline-block;
+            background:var(--primary);
+            color:#fff;
+            padding:12px 24px;
+            border-radius:12px;
+            text-decoration:none;
+            font-weight:700;
+            font-size:15px;
+            transition:all 0.2s ease;
+            box-shadow:0 4px 15px rgba(183,28,28,0.15);
+        }
+        .small-link:hover {
+            transform:translateY(-2px);
+            box-shadow:0 6px 20px rgba(183,28,28,0.2);
         }
 
-        /* responsive tweaks */
+        /* Footer */
+        footer.site-footer{
+            background:var(--bg-dark);
+            color:var(--text-light);
+            text-align:center;
+            padding:12px;
+            font-size:13px;
+            margin-top:40px;
+            border-top:1px solid rgba(255,255,255,0.04);
+        }
+
+        /* Responsive */
         @media (max-width:720px){
-            .topbar{height:56px;padding:8px 12px}
+            .topbar{height:60px;padding:8px 16px}
             nav a{display:none}
             nav a.mobile-show{display:inline-block}
-            .title{font-size:clamp(28px,10vw,48px)}
+            .title{font-size:clamp(32px,11vw,52px)}
+            section.card{padding:24px 20px}
         }
     </style>
 </head>
 <body>
-    <!-- topbar is hidden until user scrolls -->
-    <div class="topbar" role="navigation" aria-hidden="true">
-        <div class="nav-left">
-            <div class="nav-logo" aria-hidden="true">SCH</div>
-            <nav>
-                <a href="#mapSection">Map</a>
-                <a href="#videosSection">Videos</a>
-                <a href="#mythSection">Myth buster</a>
-                <a href="#bloodSection">Blood info</a>
-                <a href="#eventsSection">Events</a>
-                <a href="#aboutSection">About</a>
-                <a href="#contactSection">Contact</a>
-            </nav>
-        </div>
-        <div class="nav-right">
-            <a href="about.html">Get involved</a>
-        </div>
-    </div>
-
-    <!-- HERO: the only thing visible on load -->
-    <header class="hero" role="banner" aria-label="Hero">
+    <header class="hero">
         <div class="hero-inner">
             <h1 class="title">The Sickle Cell Hub</h1>
-            <div class="subtitle">By youth for youth</div>
-            <div class="tagline">A platform for youth — peer support, learning, and action</div>
-            <div class="hero-accent" aria-hidden="true">Youth-led • Peer-powered • Reach out</div>
+            <p class="subtitle">By Youth, For Youth</p>
+            <p class="tagline">Empowering young voices in the sickle cell community</p>
+            <div class="hero-accent">Join our community today</div>
         </div>
     </header>
 
-    <!-- main content is below; visible after scroll -->
+    <div class="topbar">
+        <div class="nav-left">
+            <div class="nav-logo">SCH</div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#education">Education</a>
+                <a href="#activities">Activities</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+        <div class="nav-right">
+            <a href="#" id="langToggle">EN/FR</a>
+        </div>
+    </div>
+
     <main>
-        <section id="mapSection" class="card" aria-labelledby="mapH">
-            <h2 id="mapH">Interactive map (open full map)</h2>
-            <p>Find clinics, youth groups and activities near you. Click to open the full interactive map page.</p>
-            <a class="small-link" href="map.html">Open map</a>
+        <section class="card">
+            <h2>Educational Resources</h2>
+            <p>Access our comprehensive library of videos and resources about sickle cell disease.</p>
+            <a href="education.html" class="small-link">Learn More</a>
         </section>
 
-        <section id="videosSection" class="card" aria-labelledby="vidH">
-            <h2 id="vidH">Educational videos</h2>
-            <p>Youth-friendly short videos about living with sickle cell and self-care.</p>
-            <a class="small-link" href="blood.html">Open videos</a>
-        </section>
-
-        <section id="mythSection" class="card" aria-labelledby="mythH">
-            <h2 id="mythH">Myth buster</h2>
-            <p>Quick facts to fight stigma and misinformation. Full tools on the dedicated page.</p>
-            <a class="small-link" href="mythbuster.html">Open myth buster</a>
-        </section>
-
-        <section id="bloodSection" class="card" aria-labelledby="bloodH">
-            <h2 id="bloodH">Blood information & resources</h2>
-            <p>Clear, practical guides about transfusions, donation and what matters for young people with SCD.</p>
-            <a class="small-link" href="blood.html">Learn more</a>
-        </section>
-
-        <section id="eventsSection" class="card" aria-labelledby="eventsH">
-            <h2 id="eventsH">Activities & events</h2>
-            <p>Volunteer opportunities, runs and local meetups — join, create or lead an event.</p>
-            <a class="small-link" href="about.html">See events</a>
-        </section>
-
-        <section id="aboutSection" class="card" aria-labelledby="aboutH">
-            <h2 id="aboutH">About</h2>
-            <p>Built by young advocates with lived experience of sickle cell. A platform for youth to connect, learn and act.</p>
-            <a class="small-link" href="about.html">About the founder</a>
-        </section>
-
-        <section id="contactSection" class="card" aria-labelledby="contactH">
-            <h2 id="contactH">Contact</h2>
-            <p>Email: <a href="mailto:hello@sicklecellhub.example">hello@sicklecellhub.example</a></p>
-            <a class="small-link" href="contact.html">Contact page</a>
+        <section class="card">
+            <h2>Community Activities</h2>
+            <p>Join our events, runs, and volunteer opportunities to support the sickle cell community.</p>
+            <a href="activities.html" class="small-link">Get Involved</a>
         </section>
     </main>
 
-    <!-- small black footer -->
-    <footer class="site-footer" role="contentinfo">
-        &copy; <span id="year"></span> The Sickle Cell Hub — By youth, for youth
+    <footer class="site-footer">
+        © 2024 The Sickle Cell Hub. All rights reserved.
     </footer>
 
     <script>
-        // show compact topbar when user scrolls past the hero
-        const onScroll = () => {
-            if (window.scrollY > 120) {
-                document.body.classList.add('scrolled');
-                document.querySelector('.topbar')?.setAttribute('aria-hidden','false');
-            } else {
-                document.body.classList.remove('scrolled');
-                document.querySelector('.topbar')?.setAttribute('aria-hidden','true');
-            }
-        };
-        window.addEventListener('scroll', onScroll, {passive:true});
-        // set year
-        document.getElementById('year').textContent = new Date().getFullYear();
-        // smooth in-page navigation
-        document.querySelectorAll('a[href^="#"]').forEach(a=>{
-            a.addEventListener('click', (e)=>{
-                const id = a.getAttribute('href').slice(1);
-                const el = document.getElementById(id);
-                if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
-            });
+        window.addEventListener('scroll', () => {
+            document.body.classList.toggle('scrolled', window.scrollY > 50);
         });
     </script>
 </body>
